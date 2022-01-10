@@ -1,65 +1,68 @@
-let firstCard = getRandomCard()
-let secondCard = getRandomCard()
-let cards = [firstCard, secondCard]
-let sum = firstCard + secondCard
+let player = {
+    name:"Frank",
+    chips: 423
+}
+let cards = []
+let sum = 0
+let message = " "
 let hasBlackJack = false
-let isAlive = true
-let len = cards.length
-//let message = ""
+let isAlive = false
 
-//let messageEl = document.getElementById("message-el")
-let messageEl = document.querySelector("#message-el")
-//let cardChoiceEl = document.getElementById("card-choice-el")
-let cardChoiceEl = document.querySelector("#card-choice-el")
-//let sumEl = document.getElementById("sum-el")
+
+let cardEl = document.querySelector("#card-el")
 let sumEl = document.querySelector("#sum-el")
-let view = document.querySelector(".new-cards")
-let newCardBtnEl = document.querySelector("#new-card-btn-el")
+let playerEl = document.querySelector("#player-el")
+let messageEl = document.querySelector("#message-el")
 
+playerEl.textContent = player.name + ":  $"+player.chips
 
-
-
-// ------------------fUNCTIONS------------
 function getRandomCard() {
-    return Math.floor((Math.random()*13))
-    
+    let randomNumber = Math.floor (Math.random()*13 ) + 1
+    if (randomNumber > 10) {
+        return 10
+    } else if(randomNumber === 1) {
+        return 11 //'J'
+    } else {
+        return randomNumber
+    }
 }
 
 function startGame() {
+    isAlive = true
+    let firstCard = getRandomCard()
+    let secondCard = getRandomCard()
+    cards = [firstCard, secondCard]
+    sum = firstCard + secondCard
     renderGame()
 }
 
 function renderGame() {
-    cardChoiceEl.textContent = "Cards:"
-    
-    //cardChoiceEl.textContent = "Cards: " + cards[0] + " " + cards[1] + " " + cards[2]
-    for (let i = 0; i < len;  i++) {
-        cardChoiceEl.textContent += cards[i] + " "
-        view.textContent += cards
+    cardEl.textContent = "Cards: "
+    for (let index = 0; index < cards.length; index++) {
+        cardEl.textContent += cards[index] + " "
     }
 
     sumEl.textContent = "Sum: " + sum
     if (sum <= 20) {
-        messageEl.textContent = "Do you want to draw a new card? 🙂"
-    } else if (sum === 21) {
-        messageEl.textContent = "Wohoo! You've got Blackjack! 🥳"
+        messageEl.textContent = "Do you wanna draw a card?"
+    } else if(sum === 21) {
+        messageEl.textContent = "You've got a blackJack"
         hasBlackJack = true
     } else {
-        messageEl.textContent = "You're out of the game! 😭"
+        messageEl.textContent = "You're out of the game"
         isAlive = false
     }
+    //messageEl.textContent = message
+
 }
 
 function newCard() {
-    // 1. Create a card variable, and hard code its value to a number (2-11)
-    let card = getRandomCard()
-    
-    // 2. Add the new card to the sum variable
-    sum += card
-    //cards.push(thirdCard)
-    cards.push(card)
-    //view.textContent += card
+    if (isAlive === true && hasBlackJack === false) {
+        let card = getRandomCard()
 
-    // 3. Call startGame()
-    renderGame()
+        cards.push(card)
+        sum += card
+        renderGame()
+    }
+
 }
